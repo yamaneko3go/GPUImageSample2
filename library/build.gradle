@@ -1,0 +1,97 @@
+apply plugin: 'com.android.library'
+
+/*
+POM_NAME=GPUImage for Android Library
+POM_ARTIFACT_ID=gpuimage-library
+POM_PACKAGING=aar
+
+VERSION_NAME=1.2.3
+VERSION_CODE=8
+GROUP=jp.co.cyberagent.android.gpuimage
+*/
+
+/*
+COMPILE_SDK_VERSION=21
+BUILD_TOOLS_VERSION=21.1.2
+TARGET_SDK_VERSION=21
+MIN_SDK_VERSION=8
+*/
+
+/*
+POM_DESCRIPTION=Image filters for Android with OpenGL (based on GPUImage for iOS)
+POM_URL=https://github.com/cyberagent/android-gpuimage
+POM_SCM_URL=scm:git@github.com:CyberAgent/android-gpuimage.git
+POM_SCM_CONNECTION=scm:git@github.com:CyberAgent/android-gpuimage.git
+POM_SCM_DEV_CONNECTION=scm:git@github.com:CyberAgent/android-gpuimage.git
+POM_LICENCE_NAME=The Apache Software License, Version 2.0
+POM_LICENCE_URL=http://www.apache.org/licenses/LICENSE-2.0.txt
+POM_LICENCE_DIST=repo
+POM_DEVELOPER_ID=pboos
+POM_DEVELOPER_NAME=Patrick Boos
+*/
+
+android {
+//    compileSdkVersion COMPILE_SDK_VERSION as int
+    compileSdkVersion = 21;
+//    buildToolsVersion BUILD_TOOLS_VERSION
+    buildToolsVersion = 21.1;
+
+    defaultConfig {
+//        minSdkVersion MIN_SDK_VERSION as int
+        minSdkVersion 8;
+//        targetSdkVersion TARGET_SDK_VERSION as int
+        targetSdkVersion 21;
+
+//        versionCode = VERSION_CODE
+        versionCode=8;
+//        versionName = VERSION_NAME
+        versionName=1.2;
+
+        ndk {
+            moduleName "gpuimage-library"
+            stl "gnustl_shared"
+            abiFilters "all"
+            ldLibs "log"
+        }
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+            jni.srcDirs = ['jni']
+        }
+
+        instrumentTest.setRoot('tests')
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    android.libraryVariants.all { variant ->
+        if (variant.buildType.isDebuggable()) {
+            return; // Skip debug builds.
+        }
+        task("javadoc${variant.name.capitalize()}", type: Javadoc) {
+            description "Generates Javadoc for $variant.name."
+            source = variant.javaCompile.source
+            ext.androidJar = System.getenv("ANDROID_HOME") + "/platforms/${android.compileSdkVersion}/android.jar"
+            classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
+        }
+
+        task("bundleJavadoc${variant.name.capitalize()}", type: Jar) {
+            description "Bundles Javadoc into zip for $variant.name."
+            classifier = "javadoc"
+            from tasks["javadoc${variant.name.capitalize()}"]
+        }
+    }
+}
+
+apply from: 'android-artifacts.gradle'
+apply from: 'central-publish.gradle'
