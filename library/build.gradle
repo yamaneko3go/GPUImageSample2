@@ -31,27 +31,20 @@ POM_DEVELOPER_NAME=Patrick Boos
 */
 
 android {
-//    compileSdkVersion COMPILE_SDK_VERSION as int
-    compileSdkVersion = 21;
-//    buildToolsVersion BUILD_TOOLS_VERSION
-    buildToolsVersion = 21.1;
+    compileSdkVersion 16
+    buildToolsVersion "19.1.0"
 
     defaultConfig {
-//        minSdkVersion MIN_SDK_VERSION as int
-        minSdkVersion 8;
-//        targetSdkVersion TARGET_SDK_VERSION as int
-        targetSdkVersion 21;
+        minSdkVersion 8 as int
+        targetSdkVersion 15 as int
 
-//        versionCode = VERSION_CODE
-        versionCode=8;
-//        versionName = VERSION_NAME
-        versionName=1.2;
+        versionCode 1
+        versionName "1"
 
         ndk {
             moduleName "gpuimage-library"
-            stl "gnustl_shared"
-            abiFilters "all"
-            ldLibs "log"
+            ldLibs "log", "android", "EGL", "GLESv1_CM"
+            abiFilters "x86","armeabi","armeabi-v7a"
         }
     }
 
@@ -95,3 +88,4 @@ android {
 
 apply from: 'android-artifacts.gradle'
 apply from: 'central-publish.gradle'
+
