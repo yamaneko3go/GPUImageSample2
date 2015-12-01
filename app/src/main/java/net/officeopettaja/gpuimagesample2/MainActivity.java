@@ -3,14 +3,16 @@ package net.officeopettaja.gpuimagesample2;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
 
-public class MainActivity extends AppCompatActivity {
+import jp.co.cyberagent.android.gpuimage.GPUImage;
+import jp.co.cyberagent.android.gpuimage.GPUImageToonFilter;
+
+public class MainActivity extends Activity {
     private final int REQ_CAMERA = 1;       //カメラのリクエストコード
 
     @Override
@@ -36,6 +38,13 @@ public class MainActivity extends AppCompatActivity {
                 if(resultCode== Activity.RESULT_OK) {
                     Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
 
+                    // GPUImage で写真加工
+                    GPUImage gpuImage = new GPUImage(this);
+                    gpuImage.setImage(bitmap);
+                    gpuImage.setFilter(new GPUImageToonFilter());
+                    bitmap = gpuImage.getBitmapWithFilterApplied();
+
+                    //ImageViewに画像を表示
                     ImageView imgMain = (ImageView)findViewById(R.id.imgMain);
                     imgMain.setImageBitmap(bitmap);
 

@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-
 /*
 POM_NAME=GPUImage for Android Library
 POM_ARTIFACT_ID=gpuimage-library
@@ -9,14 +8,12 @@ VERSION_NAME=1.2.3
 VERSION_CODE=8
 GROUP=jp.co.cyberagent.android.gpuimage
 */
-
 /*
 COMPILE_SDK_VERSION=21
 BUILD_TOOLS_VERSION=21.1.2
 TARGET_SDK_VERSION=21
 MIN_SDK_VERSION=8
 */
-
 /*
 POM_DESCRIPTION=Image filters for Android with OpenGL (based on GPUImage for iOS)
 POM_URL=https://github.com/cyberagent/android-gpuimage
@@ -29,7 +26,6 @@ POM_LICENCE_DIST=repo
 POM_DEVELOPER_ID=pboos
 POM_DEVELOPER_NAME=Patrick Boos
 */
-
 android {
     compileSdkVersion 16
     buildToolsVersion "19.1.0"
@@ -44,7 +40,7 @@ android {
         ndk {
             moduleName "gpuimage-library"
             ldLibs "log", "android", "EGL", "GLESv1_CM"
-            abiFilters "x86","armeabi","armeabi-v7a"
+            abiFilters "x86", "armeabi", "armeabi-v7a"
         }
     }
 
@@ -85,7 +81,8 @@ android {
         }
     }
 }
-
 apply from: 'android-artifacts.gradle'
 apply from: 'central-publish.gradle'
 
+dependencies {
+}
